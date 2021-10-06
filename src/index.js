@@ -70,17 +70,18 @@ function parseHTML(html) {
   for (let i = 1; i <= numChildren; i++) {
     const currentModel = $(`#productSelect > option:nth-child(${i})`);
 
+    const span = document.createElement("span");
     if (currentModel.attr("data-sku")) {
       const productName = currentModel.text().split(" - ")[0];
       const productId = productIds[productName];
-      data.push(
-        `${productName} - ${itemQuantities[productId]} Remaining`
-          .replace("\n", "")
-          .trim()
-      );
+      const a = document.createElement("a");
+      a.href = `https://www.nichecoffee.co.uk/products/niche-zero?variant=${productId}}`;
+      a.innerText = `${itemQuantities[productId]} Remaining`;
+      span.innerHTML = `${productName} - ${a.outerHTML}`;
     } else {
-      data.push(currentModel.text().replace("\n", "").trim());
+      span.innerHTML = currentModel.text().replace("\n", "").trim();
     }
+    data.push(span);
   }
   return data;
 }
@@ -97,7 +98,7 @@ function parseHTML(html) {
     items.forEach((item) => {
       const li = document.createElement("li");
       ul.appendChild(li);
-      li.innerHTML = item;
+      li.innerHTML = item.outerHTML;
     });
 
     div.appendChild(ul);
